@@ -1,7 +1,7 @@
 """
 lab4 task5
 """
-
+import random
 class Room:
     """
     class representation game room
@@ -11,6 +11,10 @@ class Room:
         self.room_name = room_name
         self.__room_desc = ''
         self.__conected_rooms = {}
+        self.__character = None
+        self.__item = None
+        self.__link_rooms_info = ''
+
 
     def set_description(self, description: str):
         """
@@ -23,7 +27,10 @@ class Room:
         connect room to another room
         """
         if isinstance(__o, Room):
-            self.__conected_rooms[direction] = __o 
+            self.__conected_rooms[direction] = __o
+            self.__link_rooms_info = '\n'.join(\
+                [f'The {self.__conected_rooms[key]} is {key}'\
+                for key in self.__conected_rooms])[:-1]
             return
         print('BAD ROOM')
 
@@ -38,6 +45,38 @@ class Room:
         setter of item in room
         """
         self.__item = item
+
+    def get_details(self):
+        """
+        getter of rooms details
+        """
+        print(f'{self.room_name}\n'+ '-'*20 + f'\
+\n{self.__room_desc}\
+\n{self.__link_rooms_info}')
+
+    def get_character(self):
+        """
+        getter of character in room
+        """
+
+        if self.__character:
+            return self.__character
+
+    def get_item(self):
+        """
+        getter of character in room
+        """
+
+        if self.__item:
+            return self.__item
+
+    def move(self, direction: str):
+        """
+        getter for room
+        """
+        if direction in self.__conected_rooms:
+            return self.__conected_rooms[direction]
+        return
 
 class Enemy:
     """
@@ -65,5 +104,48 @@ class Enemy:
         """
         self.__weakness = weakness
 
+    def describe(self):
+        """
+        output info about enemy in room
+        """
+        print(f'{self.enemy_name} is here')
+        print(self.__enemy_desc)
+
+    def talk(self):
+        """
+        func to talk with enemy
+        """
+        return f'[{self.enemy_name} says]: {self.__conversation}'
+
+    def fight(self, fight_with: object):
+        win = random.choice([0, 0, 1, 1, 1])
+        if win == 1:
+            print(f'You fend {self.enemy_name} off with the {fight_with.name}')
+            return True
+        else:
+            print(f'{self.enemy_name} crushes you, puny adventurer!')
+            return False
 class Item:
+    """
+    class representation item
+    """
+    def __init__(self, name: str) -> None:
+        self.__name = name
+        self.__description = ''
+
+    def set_description(self, desc: str):
+        self.__description = desc
+
+    def describe(self):
+        """
+        output info about item in room
+        """
+        print(f'The [{self.__name}] is here', end=' - ')
+        print(self.__description)
     
+    def get_name(self):
+        """
+        getter for name
+        """
+        if self.__name:
+            return self.__name
