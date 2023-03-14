@@ -29,8 +29,8 @@ class Room:
         if isinstance(__o, Room):
             self.__conected_rooms[direction] = __o
             self.__link_rooms_info = '\n'.join(\
-                [f'The {self.__conected_rooms[key]} is {key}'\
-                for key in self.__conected_rooms])[:-1]
+                [f'The {self.__conected_rooms[key].room_name} is {key}'\
+                for key in self.__conected_rooms])
             return
         print('BAD ROOM')
 
@@ -83,6 +83,8 @@ class Enemy:
     class representation enemy
     """
 
+    __defeated = 0
+
     def __init__(self, enemy_name: str, enemy_desc: str) -> None:
         """
         func init
@@ -90,7 +92,7 @@ class Enemy:
         self.enemy_name = enemy_name
         self.__enemy_desc = enemy_desc
         self.__conversation = ''
-        self.__weakness = ''
+        self.weakness = ''
 
     def set_conversation(self, conversation: str):
         """
@@ -102,7 +104,7 @@ class Enemy:
         """
         setter for weakness
         """
-        self.__weakness = weakness
+        self.weakness = weakness
 
     def describe(self):
         """
@@ -118,13 +120,23 @@ class Enemy:
         return f'[{self.enemy_name} says]: {self.__conversation}'
 
     def fight(self, fight_with: object):
+        """
+        func generate a fight between two characters
+        """
         win = random.choice([0, 0, 1, 1, 1])
         if win == 1:
-            print(f'You fend {self.enemy_name} off with the {fight_with.name}')
+            print(f'You fend {self.enemy_name} off with the {fight_with}')
             return True
         else:
             print(f'{self.enemy_name} crushes you, puny adventurer!')
             return False
+
+    def get_defeated(self):
+        """
+        getter for defeated enemies
+        """
+        Enemy.__defeated =+ 1
+        return Enemy.__defeated
 class Item:
     """
     class representation item
@@ -134,6 +146,9 @@ class Item:
         self.__description = ''
 
     def set_description(self, desc: str):
+        """
+        setter for description of item
+        """
         self.__description = desc
 
     def describe(self):
@@ -142,7 +157,7 @@ class Item:
         """
         print(f'The [{self.__name}] is here', end=' - ')
         print(self.__description)
-    
+
     def get_name(self):
         """
         getter for name
